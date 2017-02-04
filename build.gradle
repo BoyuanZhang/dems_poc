@@ -14,9 +14,10 @@ apply plugin: 'com.github.johnrengelman.shadow'
 
 project.ext {
 	dropwizardVersion = '1.0.6'
+	rxjavaVersion = '1.2.5'
 }
 
-mainClassName = 'com.dems.main.Application'
+mainClassName = 'com.dems.main.App'
 
 repositories {
 	mavenCentral()
@@ -24,18 +25,27 @@ repositories {
 
 dependencies {
 	compile group: 'io.dropwizard', name: 'dropwizard-core', version: dropwizardVersion
+	compile group: 'io.reactivex', name: 'rxjava', version: '1.2.5'
 }
 
 task wrapper(type: Wrapper) {
 	gradleVersion = '3.3'
 }
 
-shadowJar {
-	mergeServiceFiles()
-}
-
 jar {
 	manifest {
 		attributes 'Main-Class': mainClassName
 	}
+}
+
+shadowJar {
+	mergeServiceFiles()
+}
+
+task prepDocker(type: Copy, dependsOn: shadowJar) {
+	from 'build/libs/DEMS-all.jar'
+	into 'docker/'
+	
+	from 'config/config.yml'
+	into 'docker/'
 }

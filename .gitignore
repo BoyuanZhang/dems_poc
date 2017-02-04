@@ -1,5 +1,9 @@
+.DS_store
+build/
 .gradle/
 .classpath
 .project
 .settings/
 bin/
+docker/config.yml
+docker/DEMS-*
