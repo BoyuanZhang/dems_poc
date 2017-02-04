@@ -1,0 +1,41 @@
+buildscript {
+	repositories {
+		jcenter()
+	}
+	dependencies {
+		classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+project.ext {
+	dropwizardVersion = '1.0.6'
+}
+
+mainClassName = 'com.dems.main.Application'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile group: 'io.dropwizard', name: 'dropwizard-core', version: dropwizardVersion
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '3.3'
+}
+
+shadowJar {
+	mergeServiceFiles()
+}
+
+jar {
+	manifest {
+		attributes 'Main-Class': mainClassName
+	}
+}
